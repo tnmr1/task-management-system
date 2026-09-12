@@ -1,16 +1,129 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Task Management System</title>
-    <link rel="stylesheet" href="/static/style.css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
 
-    <h1>Task Management System</h1>
+    <div class="container">
 
-    <p>My first full-stack project.</p>
+        <h1>Task Management System</h1>
 
-    <button>Add Task</button>
+        <form action="/add" method="POST">
+
+            <input
+                type="text"
+                name="title"
+                placeholder="Enter task"
+                required
+            >
+
+            <input
+                type="text"
+                name="category"
+                placeholder="Category"
+            >
+
+            <select name="priority">
+
+                <option value="Low">
+                    Low
+                </option>
+
+                <option value="Medium">
+                    Medium
+                </option>
+
+                <option value="High">
+                    High
+                </option>
+
+            </select>
+
+            <button type="submit">
+                Add Task
+            </button>
+
+        </form>
+
+
+        <h2>Your Tasks</h2>
+
+
+        {% if tasks %}
+
+            {% for task in tasks %}
+
+                <div class="task">
+
+                    <div>
+
+                        {% if task["completed"] == 1 %}
+
+                            <h3 class="completed">
+                                {{ task["title"] }}
+                            </h3>
+
+                        {% else %}
+
+                            <h3>
+                                {{ task["title"] }}
+                            </h3>
+
+                        {% endif %}
+
+
+                        <p>
+                            Category:
+                            {{ task["category"] }}
+                        </p>
+
+                        <p>
+                            Priority:
+                            {{ task["priority"] }}
+                        </p>
+
+                    </div>
+
+
+                    <div class="buttons">
+
+                        {% if task["completed"] == 0 %}
+
+                            <a href="/complete/{{ task['id'] }}">
+                                Complete
+                            </a>
+
+                        {% endif %}
+
+
+                        <a
+                            class="delete"
+                            href="/delete/{{ task['id'] }}"
+                        >
+                            Delete
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+            <p>No tasks yet.</p>
+
+        {% endif %}
+
+    </div>
 
 </body>
+
 </html>
